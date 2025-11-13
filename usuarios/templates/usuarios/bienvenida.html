@@ -1,0 +1,12 @@
+{% extends 'usuarios/base.html' %}
+{% block content %}
+<div class="card p-4">
+  <h2 style="color:#2191FB;">Bienvenido</h2>
+  <p>El usuario <strong>{{ user.username }}</strong> con cargo <strong>{{ user.get_cargo_display }}</strong> ha ingresado al sistema.</p>
+
+  <div class="mt-3">
+    <a href="{% url 'editar' user.id %}" class="btn btn-warning">Editar contraseña</a>
+  </div>
+</div>
+{% endblock %}
+

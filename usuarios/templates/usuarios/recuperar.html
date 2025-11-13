@@ -1,0 +1,15 @@
+{% extends 'usuarios/base.html' %}
+{% block title %}Recuperar contraseña{% endblock %}
+{% block content %}
+<div class="card p-4">
+  <h2>Recuperar contraseña</h2>
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-info">Recuperar</button>
+  </form>
+  {% if codigo %}
+    <p>Código enviado: <strong>{{ codigo }}</strong></p>
+  {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,11 @@
+{% extends 'usuarios/base.html' %}
+{% block content %}
+<div class="card p-4">
+  <h2 style="color:#2191FB;">Editar contraseña</h2>
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-primary">Guardar</button>
+  </form>
+</div>
+{% endblock %}
