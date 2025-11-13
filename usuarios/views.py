@@ -31,7 +31,6 @@ class LoginView(FormView):
         else:
             return self.render_to_response(self.get_context_data(form=form, mensaje='Usuario no encontrado'))
 
-# RecuperarView 
 class RecuperarView(FormView):
     template_name = 'usuarios/recuperar.html'
     form_class = RecuperarForm
@@ -39,13 +38,36 @@ class RecuperarView(FormView):
     def form_valid(self, form):
         username = form.cleaned_data['username']
         user = Usuario.objects.filter(username=username).first()
-        codigo = None
 
-        if user:
+        # Validar existencia y estado de la cuenta
+        if not user:
+            return self.render_to_response(self.get_context_data(
+                form=form,
+                mensaje='Usuario No encontrado',
+                alerta=True
+            ))
+
+        if user.bloqueado:
+            return self.render_to_response(self.get_context_data(
+                form=form,
+                mensaje='Cuenta bloqueada. No puede recuperar.',
+                alerta=True
+            ))
+
+        # Generar codigo unico
+        while True:
             codigo = str(random.randint(100000, 999999))
-            CodigoRecuperacion.objects.create(usuario=user, codigo=codigo)
+            if not CodigoRecuperacion.objects.filter(codigo=codigo).exists():
+                break
 
-        return self.render_to_response(self.get_context_data(form=form, codigo=codigo))
+        CodigoRecuperacion.objects.create(usuario=user, codigo=codigo)
+
+        return self.render_to_response(self.get_context_data(
+            form=form,
+            codigo=codigo,
+            mensaje='Código generado correctamente'
+        ))
+
 
 # BienvenidaView 
 class BienvenidaView(DetailView):
